@@ -10,7 +10,9 @@
 import React, { Component, PropTypes } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './BlogPage.scss';
+import BlogStore from '../../stores/blogstore';
 import BlogForm from './BlogForm';
+import * as BlogActions from '../../actions/BlogActions';
 
 const title = 'Blog';
 
@@ -20,6 +22,11 @@ class BlogPage extends Component {
 
   constructor(props) {
     super(props);
+
+    this.getBlogs = this.getBlogs.bind(this);
+    this.state = {
+        blogs: BlogStore.getAll()
+    };
   }
 
   static contextTypes = {
@@ -27,20 +34,44 @@ class BlogPage extends Component {
   };
 
   componentWillMount() {
+
     this.context.onSetTitle(title);
+
+    BlogStore.on('change', this.getBlogs);
+
+    console.log('count', BlogStore.listenerCount('change'));
+  }
+
+  getBlogs() {
+    this.setState({
+      blogs: BlogStore.getAll()
+    });
+  }
+
+  componentWillUnmount() {
+
+    BlogStore.removeListener('change', this.getBlogs)
+
   }
 
 
   render() {
+
+    const { blogs } = this.state;
+
+    const BlogComponents = blogs.map((blog) => {
+      return <p key={blog.id}>{blog.text}</p>
+    });
     return (
       <div className={s.container}>
         <h1>{title}</h1>
-        <p>This is our blog page!</p>
+        {BlogComponents}
         <BlogForm />
       </div>
     );
   }
 
 }
+
 
 export default withStyles(BlogPage, s);

@@ -9,8 +9,11 @@
 
 import React, { Component, PropTypes } from 'react';
 import Location from '../../../core/Location';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import s from './BlogForm.scss';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import * as BlogActions from '../../../actions/BlogActions';
 
 
 class BlogForm extends Component {
@@ -18,7 +21,7 @@ class BlogForm extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { value: 'Hi'};
+    this.state = { value: ''};
   }
 
   handleChange = (event) => {
@@ -28,9 +31,20 @@ class BlogForm extends Component {
   };
 
   handleClick = () => {
-    this.setState({
-      value:'',
-    });
+
+    if(this.state.value) {
+
+      console.log('Creating Blog');
+
+      BlogActions.createBlog(this.state.value);
+
+
+      this.setState({
+        value:'',
+      });
+
+    }
+
   };
 
   render() {
@@ -42,11 +56,11 @@ class BlogForm extends Component {
           value={this.state.value}
           onChange={this.handleChange}
         />
-        <RaisedButton label="Reset" primary={true} onClick={this.handleClick}/>
+        <RaisedButton label="Add" primary={true} onClick={this.handleClick} className={s.mybutton}/>
       </div>
     );
   }
 
 }
 
-export default BlogForm;
+export default withStyles(BlogForm, s);
