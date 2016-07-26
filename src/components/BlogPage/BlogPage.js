@@ -54,6 +54,11 @@ class BlogPage extends Component {
 
   }
 
+  reloadClick() {
+    console.log('Reload clicked ');
+    BlogActions.loadBlogs();
+  }
+
 
   render() {
 
@@ -65,6 +70,7 @@ class BlogPage extends Component {
     return (
       <div className={s.container}>
         <h1>{title}</h1>
+        <button onClick={this.reloadClick.bind(this)}>Reload</button>
         {BlogComponents}
         <BlogForm />
       </div>

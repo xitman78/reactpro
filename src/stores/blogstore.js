@@ -37,6 +37,12 @@ class BlogStore extends EventEmitter {
           this.createBlog(action.text);
           break;
         }
+
+        case 'LOADED_BLOG': {
+          this.blogs = action.blogs;
+          this.emit('change');
+          break;
+        }
       }
     }
 
@@ -47,6 +53,6 @@ const blogStore = new BlogStore();
 
 dispatcher.register(blogStore.handleActions.bind(blogStore));
 
-//window.blogStore = blogStore;
+global.bss = blogStore;
 
 export default blogStore;
