@@ -8,10 +8,7 @@ class BlogStore extends EventEmitter {
     constructor() {
       super();
 
-      this.blogs = [
-        {id: 1, text: 'First Blog'},
-        {id: 2, text: 'Second Blog'}
-      ];
+      this.blogs = [];
     }
 
     getAll() {

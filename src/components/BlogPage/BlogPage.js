@@ -13,6 +13,12 @@ import s from './BlogPage.scss';
 import BlogStore from '../../stores/blogstore';
 import BlogForm from './BlogForm';
 import * as BlogActions from '../../actions/BlogActions';
+import IconButton from 'material-ui/IconButton';
+import RefreshButton from 'material-ui/svg-icons/navigation/refresh';
+import FontIcon from 'material-ui/FontIcon';
+import {Observable}  from 'rxjs/Observable';
+import 'rxjs/Rx';
+
 
 const title = 'Blog';
 
@@ -27,6 +33,16 @@ class BlogPage extends Component {
     this.state = {
         blogs: BlogStore.getAll()
     };
+
+    // this.s$ = new Observable(orserver => {
+    //   let count = 0;
+    //   let interval = setInterval(() => {
+    //     orserver.next(count++);
+    //   }, 1000);
+    //
+    //   return () => clearInterval(interval);
+    // });
+
   }
 
   static contextTypes = {
@@ -40,6 +56,8 @@ class BlogPage extends Component {
     BlogStore.on('change', this.getBlogs);
 
     console.log('count', BlogStore.listenerCount('change'));
+
+    BlogActions.loadBlogs();
   }
 
   getBlogs() {
@@ -52,11 +70,15 @@ class BlogPage extends Component {
 
     BlogStore.removeListener('change', this.getBlogs)
 
+    // if(this.unsub) this.unsub.unsubscribe();
+
   }
 
   reloadClick() {
     console.log('Reload clicked ');
     BlogActions.loadBlogs();
+
+    // this.unsub = this.s$.subscribe( value => console.log(value) );
   }
 
 
@@ -67,10 +89,16 @@ class BlogPage extends Component {
     const BlogComponents = blogs.map((blog) => {
       return <p key={blog.id}>{blog.text}</p>
     });
+    
     return (
       <div className={s.container}>
         <h1>{title}</h1>
-        <button onClick={this.reloadClick.bind(this)}>Reload</button>
+        <IconButton
+          onClick={this.reloadClick.bind(this)}
+          tooltip="Reload blogs"
+          tooltipPosition="top-center">
+          <RefreshButton />
+        </IconButton>
         {BlogComponents}
         <BlogForm />
       </div>

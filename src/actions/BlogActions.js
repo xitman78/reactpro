@@ -3,7 +3,7 @@ import dispatcher from '../dispatcher';
 export function createBlog(text) {
   console.log('BlogActions dispatch');
 
-  let params = { "_id": "12132423424", "title": text, "body": "somebody"};
+  let params = { "_id": '' + Date.now(), "title": text, "body": "somebody"};
 
   let req = new XMLHttpRequest();
 
@@ -11,7 +11,6 @@ export function createBlog(text) {
 
   req.open('POST', 'http://localhost:8000/api/news');
   req.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-  req.setRequestHeader('Content-Length', send_data.length);
   req.send(send_data);
 
   req.addEventListener('load', function(event) {
@@ -26,6 +25,7 @@ export function createBlog(text) {
   });
 
 }
+
 
 export function loadBlogs() {
 
