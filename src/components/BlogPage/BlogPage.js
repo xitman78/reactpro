@@ -89,7 +89,7 @@ class BlogPage extends Component {
     const BlogComponents = blogs.map((blog) => {
       return <p key={blog.id}>{blog.text}</p>
     });
-    
+
     return (
       <div className={s.container}>
         <h1>{title}</h1>
