@@ -7,15 +7,29 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-@import '../variables.scss';
+@import '../../variables.scss';
 
 .root {
 
 }
 
-.container {
-  margin: 0 auto;
-  padding: 40px 0 40px;
-  max-width: 600px;
-    /*$max-content-width; */
+.FormPadding {
+  padding-left: 40px;
+}
+
+.LoginAction {
+  position:relative;
+  height: 40px;
+}
+
+.LoginProgress {
+  position:absolute;
+  top:-20px;
+  left:45%;
+}
+
+.SignInButton {
+  position: absolute;
+  top: 0;
+  right: 20px;
 }
