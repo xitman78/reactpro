@@ -81,6 +81,7 @@ class LoginForm extends Component {
                 floatingLabelText="Login or E-mail"
                 value={this.state.login}
                 onChange={this.handleChangeLogin}
+                fullWidth={true}
               />
               <br />
               <TextField
@@ -90,6 +91,8 @@ class LoginForm extends Component {
                 value={this.state.password}
                 onChange={this.handleChangePassword}
                 type="password"
+                fullWidth={true}
+                errorText=""
               />
             </CardText>
           <CardActions className={s.LoginAction}>
@@ -113,5 +116,6 @@ class LoginForm extends Component {
   }
 
 }
+
 
 export default withStyles(LoginForm, s);
