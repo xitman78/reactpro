@@ -9,6 +9,7 @@ class BlogStore extends EventEmitter {
       super();
 
       this.blogs = [];
+      this.login_response = {};
     }
 
     getAll() {
@@ -38,6 +39,12 @@ class BlogStore extends EventEmitter {
         case 'LOADED_BLOG': {
           this.blogs = action.blogs;
           this.emit('change');
+          break;
+        }
+
+        case 'LOGIN_RESPONSE': {
+          this.login_response = action.response;
+          this.emit('login_response');
           break;
         }
       }

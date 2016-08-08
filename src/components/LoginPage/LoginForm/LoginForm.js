@@ -15,8 +15,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import CircularProgress from 'material-ui/CircularProgress';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import * as BlogActions from '../../../actions/BlogActions';
-
+import * as LoginActions from '../../../actions/LoginActions';
+import BlogStore from '../../../stores/blogstore';
 
 
 class LoginForm extends Component {
@@ -27,10 +27,36 @@ class LoginForm extends Component {
     this.state = { login: '', password: '', submit: true};
   }
 
+  componentDidMount() {
+
+    BlogStore.on('login_response', this.loginResponse);
+
+  }
+
+  componentWillUnmount() {
+
+    BlogStore.removeListener('login_response', this.loginResponse);
+
+  }
+
+  loginResponse() {
+
+    console.log('Login form on login response', BlogStore.login_response);
+
+    if(BlogStore.login_response.success === true ) {
+      //router.transitionTo('contact');
+      //router.
+      //global.location.href = '/contact';
+      console.log('Route ', BlogStore.login_response.redirect_url);
+      Location.push(BlogStore.login_response.redirect_url);
+    }
+
+  }
+
   handleChangeLogin = (event) => {
 
     let login = event.target.value.trim().substr(0,20);
-    let submit = !(login.length > 3 && this.state.password.length > 5);
+    let submit = !(login.length > 1 && this.state.password.length > 5);
 
     this.setState({
       login: login,
@@ -43,7 +69,7 @@ class LoginForm extends Component {
   handleChangePassword = (event) => {
 
     let password = event.target.value.trim().substr(0,20);
-    let submit = !(this.state.login.length > 3 && password.length > 5);
+    let submit = !(this.state.login.length > 1 && password.length > 5);
 
      this.setState({
        login: this.state.login,
@@ -62,6 +88,8 @@ class LoginForm extends Component {
     olds.disable_inputs = true;
 
     this.setState(olds);
+
+    LoginActions.login(this.state.login, this.state.password);
 
   };
 

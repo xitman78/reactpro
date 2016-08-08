@@ -65,6 +65,23 @@ server.get('/login/facebook/return',
   }
 );
 
+server.post('/api/login', (req, res) => {
+  //console.log('Login request ', req);
+
+  if(!req.body.login || !req.body.password) {
+    return res.json( { error: 'Credentials not found'} );
+  }
+
+  if(req.body.login !== 'amc' && req.body.password !== 'password') {
+    return res.json( { error: 'Invalid credentials'} );
+  }
+
+  res.json( {success: true, redirect_url: '/contact' } );
+
+  //res.redirect('/contact');
+
+});
+
 //
 // Register API middleware
 // -----------------------------------------------------------------------------
