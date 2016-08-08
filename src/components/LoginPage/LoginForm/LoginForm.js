@@ -17,6 +17,9 @@ import CircularProgress from 'material-ui/CircularProgress';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import * as LoginActions from '../../../actions/LoginActions';
 import BlogStore from '../../../stores/blogstore';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+//import Alert from '../../Alert';
 
 
 class LoginForm extends Component {
@@ -25,6 +28,7 @@ class LoginForm extends Component {
     super(props);
 
     this.state = { login: '', password: '', submit: true};
+
   }
 
   componentDidMount() {
@@ -39,19 +43,31 @@ class LoginForm extends Component {
 
   }
 
-  loginResponse() {
+  loginResponse = () => {
 
     console.log('Login form on login response', BlogStore.login_response);
 
     if(BlogStore.login_response.success === true ) {
-      //router.transitionTo('contact');
-      //router.
-      //global.location.href = '/contact';
-      console.log('Route ', BlogStore.login_response.redirect_url);
+      //console.log('Route ', BlogStore.login_response.redirect_url);
       Location.push(BlogStore.login_response.redirect_url);
     }
+    else {
+      console.log('This ', this);
+      let olds = this.state;
+      olds.message = BlogStore.login_response.error;
+      olds.alert = true
+      olds.disable_inputs = false;
+      this.setState(olds);
+    }
 
-  }
+  };
+
+
+  handleClose = () => {
+    let olds = this.state;
+    olds.alert = false;
+    this.setState(olds);
+  };
 
   handleChangeLogin = (event) => {
 
@@ -93,7 +109,17 @@ class LoginForm extends Component {
 
   };
 
+
   render() {
+
+    const actions = [
+      <FlatButton
+        label="Okay"
+        primary={true}
+        onTouchTap={this.handleClose}
+      />
+    ];
+
     return (
       <div>
         <Card>
@@ -103,7 +129,6 @@ class LoginForm extends Component {
           />
           <CardText>
               <TextField
-                id="login-input"
                 disabled={this.state.disable_inputs}
                 // hintText="Type you email or username"
                 floatingLabelText="Login or E-mail"
@@ -113,7 +138,6 @@ class LoginForm extends Component {
               />
               <br />
               <TextField
-                id="pass-input"
                 disabled={this.state.disable_inputs}
                 floatingLabelText="Password"
                 value={this.state.password}
@@ -139,6 +163,14 @@ class LoginForm extends Component {
             }
           </CardActions>
         </Card>
+        <Dialog
+          actions={actions}
+          modal={false}
+          open={this.state.alert ? true : false }
+          onRequestClose={this.handleClose}
+        >
+          { this.state.message }
+        </Dialog>
       </div>
     );
   }
